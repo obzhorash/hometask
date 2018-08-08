@@ -76,27 +76,26 @@ function createDiv() {
    addListeners(newDiv);
  */
 
-function addListeners(target) {
-    
-    target.onmousedown = function(e) {
-        let coords = getCoords(target);
-        let shiftX = e.pageX - coords.left;
-        let shiftY = e.pageY - coords.top;
+function addListeners(e) {
+    let target = e.target;   
+    let coords = getCoords(target);
+    let shiftX = e.pageX - coords.left;
+    let shiftY = e.pageY - coords.top;
 
-        function moveAt(e) {
-            target.style.left = e.pageX - shiftX + 'px';
-            target.style.top = e.pageY - shiftY + 'px';
-        }
+    function moveAt(e) {
+        target.style.left = e.pageX - shiftX + 'px';
+        target.style.top = e.pageY - shiftY + 'px';
+    }
 
-        document.onmousemove = function(e) {
-            moveAt(e);
-        }
+    document.onmousemove = function(e) {
+        moveAt(e);
+    }
 
-        target.onmouseup = function() {
-            document.onmousemove = null;
-            target.onmouseup = null;
-        }
-    };
+    target.onmouseup = function() {
+        document.onmousemove = null;
+        target.onmouseup = null;
+    }
+
     function getCoords(elem) { 
         let box = elem.getBoundingClientRect();
 
@@ -109,6 +108,8 @@ function addListeners(target) {
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
+homeworkContainer.addEventListener('mousedown', addListeners);
+
 addDivButton.addEventListener('click', function() {
     // создать новый div
     const div = createDiv();
@@ -116,7 +117,6 @@ addDivButton.addEventListener('click', function() {
     // добавить на страницу
     homeworkContainer.appendChild(div);
     // назначить обработчики событий мыши для реализации D&D
-    addListeners(div);
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
 });
